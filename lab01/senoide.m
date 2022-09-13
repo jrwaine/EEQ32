@@ -19,22 +19,34 @@
 
 %% uso: senoide(vp, vn, f, fa, t)
 %%
-%% Plota uma onda senoidal de freqüência 'f' (Hz) , valor de pico
+%% Plota uma onda senoidal de freqï¿½ï¿½ncia 'f' (Hz) , valor de pico
 %%positivo 'vp' (V), valor de pico negativo 'vn' (V), intervalo de
-%%tempo 't' (s) e freqüência de amostragem 'fa' (Hz).
+%%tempo 't' (s) e freqï¿½ï¿½ncia de amostragem 'fa' (Hz).
 
-function [Y]=senoide(vp, vn, f, fa, t)
+% function [Y]=senoide(vp, vn, f, fa, t)
+% 
+%     amostras=1:(t*fa); %vetor de amostragem
+% 
+%     amplitude=(vp-vn)/2; %calcula a amplitude do sinal
+% 
+%     Y0=(vp+vn)/2; %calcula o deslocamento do sinal em Y
+% 
+%     Y=Y0+(amplitude*sin((2*pi*f*amostras)/fa)); %calcula onda senoidal
+% 
+%     %plota grï¿½fico da senï¿½ide
+%     title('onda senoidal');xlabel('nï¿½mero da amostra');ylabel('amplitude(V)');plot(amostras,Y);grid;
+% 
+% end
 
-	amostras=1:(t*fa); %vetor de amostragem
+disp(pi);
+f = 1;
+signal = @(t) (sin(2*pi*f*t)+1.5*sin(2*pi*5*f*t)+2*sin(2*pi*12*f*t)+sin(2*pi*14*f*t));
+% signal = @(t) (sin(2*pi*f*t));
 
-	amplitude=(vp-vn)/2; %calcula a amplitude do sinal
+times = 0:0.001:14;
 
-	Y0=(vp+vn)/2; %calcula o deslocamento do sinal em Y
+values = signal(times);
 
- 	Y=Y0+(amplitude*sin((2*pi*f*amostras)/fa)); %calcula onda senoidal
+plot(times, values);
 
- 	%plota gráfico da senóide
-	title('onda senoidal');xlabel('número da amostra');ylabel('amplitude(V)');plot(amostras,Y);grid;
-
-end
 
