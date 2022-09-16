@@ -17,14 +17,16 @@
 %% Software Foundation, 59 Temple Place - Suite 330, Boston, MA
 %% 02111-1307, USA.
 
+freq = 64;
+ta = 10;
+componente1 = senoide_get(1, -1, 1, freq, ta);
+componente2 = senoide_get(0.2, -0.2, 5, freq, ta);
+componente3 = senoide_get(2, -2, 12, freq, ta);
+componente4 = senoide_get(1, -1, 14, freq, ta);
 
-componente1 = senoide_get(1, -1, 1, 64000, 10);
-componente2 = senoide_get(0.2, -0.2, 5, 64000, 10);
-componente3 = senoide_get(2, -2, 12, 64000, 10);
-componente4 = senoide_get(1, -1, 5, 64000, 10);
-
-sum_componentes = componente1 + componente2 + componente3 + componente4;
-times = 0:10*64000;
+sum_components = componente1 + componente2 + componente3 + componente4;
+low_band = componente1 + componente2;
+high_band = componente3 + componente4;
 
 % plot(times, componente1);
 % plot(times, componente2);
@@ -35,11 +37,25 @@ times = 0:10*64000;
 % filtro sinc (janela retangular) passa baixa de 0.4pi.rad/s
 % b = 0.4*sinc(0.4*(-25:25));
 
-low_filter = sinc(2*8.5/64*(-1000:1000));
+low_sinc_filter = sinc(2*8.5/64*(-1000:1000));
+L = 10;
+low_rect_filter = fir1(30, [8.5/64 ], "low", rectwin(31), "noscale");
+high_pass_filter = fir1(30, [8.5/64 ], "high", rectwin(31), "noscale");
 
-% plot(low_filter)
-fvtool(low_filter, 1)
+conv_res = conv(sum_components, low_rect_filter);
+% plot(high_pass_filter, "o");
 
+range_plot = 64;
+plot(conv_res(1:range_plot));
+hold;
+plot(sum_components(1:range_plot));
+plot(low_band(1:range_plot));
+hold off;
+
+legend('Convolution','low signal', 'low pass sum');
+
+% fvtool(low_filter, 1)
+% fvtool(conv_res, 1);
 
 % title('Resultado filtro');
 % xlabel('Amostras');
